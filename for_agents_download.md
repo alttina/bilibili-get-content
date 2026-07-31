@@ -1,5 +1,15 @@
 # Install this skill in your agents
 
+## Easy install
+
+Copy this single sentence into your agent:
+
+```text
+Install the `harvest-video-ingestion` skill from `https://github.com/alttina/bilibili-get-content` for all supported agents using `npx skills add https://github.com/alttina/bilibili-get-content --skill harvest-video-ingestion --global --agent '*' --yes`; then verify with `npx skills list` and confirm that `harvest-video-ingestion` is listed.
+```
+
+## Terminal command
+
 Copy and run this single command in a terminal to install the `harvest-video-ingestion` skill for
 all supported agents:
 

@@ -39,6 +39,12 @@ For a project-local installation, omit `--global`.
 
 A one-line copy/paste version is in [`for_agents_download.md`](for_agents_download.md).
 
+## Easy install
+
+```text
+Install the `harvest-video-ingestion` skill from `https://github.com/alttina/bilibili-get-content` for all supported agents using `npx skills add https://github.com/alttina/bilibili-get-content --skill harvest-video-ingestion --global --agent '*' --yes`; then verify with `npx skills list` and confirm that `harvest-video-ingestion` is listed.
+```
+
 ## Use
 
 After installation, ask an agent for example:
