@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=timeGradient&height=250&section=header&text=Bilibili%20Get%20Content&fontSize=70&animation=fadeIn&fontAlignY=38&desc=Portable%20Agent%20Skill%20for%20BliSolver&descAlignY=55&descAlign=50" alt="Skill Banner">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=timeGradient&height=250&section=header&text=BliSolver&fontSize=90&animation=fadeIn&fontAlignY=38&desc=Portable%20Agent%20Skill%20for%20Video%20Ingestion&descAlignY=55&descAlign=50" alt="Skill Banner">
   <p><strong>Portable Agent Skill for operating the BliSolver <code>blisolver</code> video-ingestion pipeline.</strong></p>
   <p>
     <a href="README.md">English</a> | <a href="README_zh.md">简体中文</a>
@@ -24,7 +24,6 @@ The skill teaches compatible coding agents how to:
 
 ```bash
 npx skills add alttina/bilibili-get-content \
-  --skill blisolver-video-ingestion \
   --global \
   --agent '*' \
   --yes
@@ -34,7 +33,6 @@ npx skills add alttina/bilibili-get-content \
 
 ```bash
 npx skills add alttina/bilibili-get-content \
-  --skill blisolver-video-ingestion \
   --global \
   --agent codex \
   --yes
