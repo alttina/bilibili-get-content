@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>✨ Bilibili Get Content (Agent Skill)</h1>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=timeGradient&height=250&section=header&text=Bilibili%20Get%20Content&fontSize=70&animation=fadeIn&fontAlignY=38&desc=Portable%20Agent%20Skill%20for%20BliSolver&descAlignY=55&descAlign=50" alt="Skill Banner">
   <p><strong>Portable Agent Skill for operating the BliSolver <code>blisolver</code> video-ingestion pipeline.</strong></p>
   <p>
     <a href="README.md">English</a> | <a href="README_zh.md">简体中文</a>

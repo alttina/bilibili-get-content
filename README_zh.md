@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>✨ Bilibili Get Content (Agent Skill)</h1>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=timeGradient&height=250&section=header&text=Bilibili%20Get%20Content&fontSize=70&animation=fadeIn&fontAlignY=38&desc=BliSolver%20%E4%BE%BF%E6%90%BA%E5%BC%8F%E6%8F%92%E4%BB%B6&descAlignY=55&descAlign=50" alt="Skill Banner">
   <p><strong>用于操作 BliSolver <code>harvest</code> 视频摄取管道的便携式 Agent Skill。</strong></p>
   <p>
     <a href="README.md">English</a> | <a href="README_zh.md">简体中文</a>
