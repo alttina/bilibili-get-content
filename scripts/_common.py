@@ -1,4 +1,4 @@
-"""Shared runtime and subprocess helpers for the portable harvest skill."""
+"""Shared runtime and subprocess helpers for the portable blisolver skill."""
 
 from __future__ import annotations
 
@@ -11,9 +11,42 @@ from pathlib import Path
 from typing import Sequence
 
 
+import re
+from urllib.parse import parse_qs, urlparse
+
+_URL_RE = re.compile(r"(https?://[^\s\"'>]+|//[^\s\"'>]+)")
+
+
+def extract_url(text: str) -> str:
+    """Extract and sanitize a valid video URL from raw input text."""
+    if not text:
+        return ""
+
+    match = _URL_RE.search(text)
+    url = match.group(1) if match else text.strip()
+
+    if url.startswith("//"):
+        url = "https:" + url
+
+    parsed = urlparse(url)
+    host = parsed.netloc.lower()
+
+    if "player.bilibili.com" in host:
+        qs = parse_qs(parsed.query)
+        bvid = qs.get("bvid", [None])[0]
+        part = qs.get("p", ["1"])[0]
+        if bvid:
+            canon = f"https://www.bilibili.com/video/{bvid}"
+            if part and part != "1":
+                canon += f"?p={part}"
+            return canon
+
+    return url
+
+
 @dataclass(frozen=True)
 class Runtime:
-    """How a wrapper should invoke harvest."""
+    """How a wrapper should invoke blisolver."""
 
     command: tuple[str, ...]
     cwd: Path | None
@@ -26,7 +59,7 @@ def resolve_project_root(explicit: str | None = None) -> Path | None:
     candidates: list[Path] = []
     if explicit:
         candidates.append(Path(explicit).expanduser())
-    configured = os.environ.get("HARVEST_PROJECT_ROOT")
+    configured = os.environ.get("BLISOLVER_PROJECT_ROOT")
     if configured:
         candidates.append(Path(configured).expanduser())
 
@@ -35,7 +68,7 @@ def resolve_project_root(explicit: str | None = None) -> Path | None:
     for candidate in candidates:
         candidate = candidate.resolve()
         if (
-            (candidate / "harvest" / "__init__.py").is_file()
+            (candidate / "blisolver" / "__init__.py").is_file()
             and (candidate / "pyproject.toml").is_file()
         ):
             return candidate
@@ -54,13 +87,13 @@ def resolve_runtime(explicit: str | None = None) -> Runtime:
             else os.pathsep.join((str(root), old_pythonpath))
         )
         return Runtime(
-            command=(sys.executable, "-m", "harvest.cli"),
+            command=(sys.executable, "-m", "blisolver.cli"),
             cwd=root,
             env=env,
             kind="checkout",
         )
 
-    executable = shutil.which("harvest")
+    executable = shutil.which("blisolver")
     if executable:
         return Runtime(
             command=(executable,),
@@ -69,8 +102,8 @@ def resolve_runtime(explicit: str | None = None) -> Runtime:
             kind="installed",
         )
     raise RuntimeError(
-        "could not find a BliSolver checkout or an installed harvest command; "
-        "use --project-root or set HARVEST_PROJECT_ROOT"
+        "could not find a BliSolver checkout or an installed blisolver command; "
+        "use --project-root or set BLISOLVER_PROJECT_ROOT"
     )
 
 

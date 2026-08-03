@@ -1,4 +1,4 @@
-"""Explicit, non-interactive adapter for ``harvest ingest``."""
+"""Explicit, non-interactive adapter for ``blisolver ingest``."""
 
 from __future__ import annotations
 
@@ -6,12 +6,12 @@ import argparse
 import json
 import sys
 
-from _common import resolve_runtime, run_command
+from _common import extract_url, resolve_runtime, run_command
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Run harvest ingest with explicit pipeline flags."
+        description="Run blisolver ingest with explicit pipeline flags."
     )
     parser.add_argument("url", help="bilibili.com or YouTube URL")
     parser.add_argument("--project-root", help="BliSolver checkout to use")
@@ -23,7 +23,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--robust", action="store_true", help="disable previous-text context")
     parser.add_argument("--no-vision", action="store_true", help="skip frame captioning")
     parser.add_argument("--dedup-threshold", type=int, help="phash hamming threshold")
-    parser.add_argument("--scene-threshold", type=float, help="deprecated harvest compatibility flag")
+    parser.add_argument("--scene-threshold", type=float, help="deprecated blisolver compatibility flag")
     parser.add_argument("--out", help="output root")
     parser.add_argument("--no-frame-images", action="store_true", help="omit delivered PNGs")
     parser.add_argument("--danmaku", action="store_true", help="fetch bilibili danmaku")
@@ -39,7 +39,8 @@ def _flag(command: list[str], flag: str, value: object | None) -> None:
 
 
 def _build_command(runtime, args: argparse.Namespace) -> list[str]:
-    command = [*runtime.command, "ingest", args.url]
+    url = extract_url(args.url)
+    command = [*runtime.command, "ingest", url]
     _flag(command, "--part", args.part)
     if args.all_parts:
         command.append("--all-parts")

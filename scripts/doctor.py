@@ -1,4 +1,4 @@
-"""Offline environment report for the portable harvest skill."""
+"""Offline environment report for the portable blisolver skill."""
 
 from __future__ import annotations
 
@@ -46,7 +46,7 @@ def _doctor(project_root: str | None) -> dict:
         runtime = resolve_runtime(project_root)
         if runtime.kind == "checkout":
             imported = subprocess.run(
-                [sys.executable, "-c", "import harvest.cli"],
+                [sys.executable, "-c", "import blisolver.cli"],
                 cwd=str(runtime.cwd),
                 env=runtime.env,
                 capture_output=True,
@@ -54,17 +54,17 @@ def _doctor(project_root: str | None) -> dict:
                 check=False,
             )
             if imported.returncode != 0:
-                detail = "checkout found but harvest import failed"
+                detail = "checkout found but blisolver import failed"
                 error_line = (imported.stderr or "").strip().splitlines()
                 if error_line:
                     detail += f": {error_line[-1][:240]}"
-                checks.append(_check("harvest", "error", detail))
+                checks.append(_check("blisolver", "error", detail))
             else:
-                checks.append(_check("harvest", "ok", "checkout runtime discovered"))
+                checks.append(_check("blisolver", "ok", "checkout runtime discovered"))
         else:
-            checks.append(_check("harvest", "ok", "installed command available"))
+            checks.append(_check("blisolver", "ok", "installed command available"))
     except RuntimeError as exc:
-        checks.append(_check("harvest", "error", str(exc)))
+        checks.append(_check("blisolver", "error", str(exc)))
 
     ffmpeg = _command_available("ffmpeg") or (
         "configured" if os.environ.get("FFMPEG_PATH") else None
@@ -86,7 +86,7 @@ def _doctor(project_root: str | None) -> dict:
         )
     )
 
-    whisper = os.environ.get("HARVEST_WHISPER_CLI") or _command_available("whisper-cli")
+    whisper = os.environ.get("BLISOLVER_WHISPER_CLI") or _command_available("whisper-cli")
     checks.append(
         _check(
             "whisper-cli",
@@ -106,8 +106,8 @@ def _doctor(project_root: str | None) -> dict:
         )
     )
 
-    worker = os.environ.get("HARVEST_OCR_WORKER")
-    python = os.environ.get("HARVEST_OCR_VENV_PYTHON")
+    worker = os.environ.get("BLISOLVER_OCR_WORKER")
+    python = os.environ.get("BLISOLVER_OCR_VENV_PYTHON")
     if root:
         worker = worker or str(root / "scripts" / "ocr_worker.py")
         python = python or str(root / ".ocr-venv" / "bin" / "python")
@@ -125,10 +125,10 @@ def _doctor(project_root: str | None) -> dict:
     if os.environ.get("SESSDATA"):
         auth_detail = "bilibili SESSDATA configured"
         auth_status = "ok"
-    elif os.environ.get("HARVEST_COOKIES_PROFILE"):
+    elif os.environ.get("BLISOLVER_COOKIES_PROFILE"):
         auth_detail = "browser cookie profile configured"
         auth_status = "ok"
-    elif os.environ.get("HARVEST_COOKIES_BROWSER"):
+    elif os.environ.get("BLISOLVER_COOKIES_BROWSER"):
         auth_detail = "browser cookie source configured"
         auth_status = "warn"
     else:
@@ -147,7 +147,7 @@ def _doctor(project_root: str | None) -> dict:
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Report harvest runtime and stage prerequisites without network calls."
+        description="Report blisolver runtime and stage prerequisites without network calls."
     )
     parser.add_argument("--project-root", help="BliSolver checkout to use")
     parser.add_argument("--json", action="store_true", help="emit one JSON object")

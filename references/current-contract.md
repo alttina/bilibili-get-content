@@ -5,9 +5,9 @@
 The current CLI is:
 
 ```text
-harvest ingest <url> [flags]
-harvest probe  <url>
-harvest mcp
+blisolver ingest <url> [flags]
+blisolver probe  <url>
+blisolver mcp
 ```
 
 There is no bare-URL form. `probe` takes only a URL and prints one JSON `ProbeResult` line on
@@ -21,7 +21,7 @@ compatibility flag.
 
 ## Bundle schema 1.1
 
-`harvest/schema.py` defines the current Pydantic contract and `SCHEMA_VERSION = "1.1"`.
+`blisolver/schema.py` defines the current Pydantic contract and `SCHEMA_VERSION = "1.1"`.
 `ProbeResult` carries best-effort metadata and a point-in-time `stats` snapshot. `Bundle` carries
 that metadata plus:
 

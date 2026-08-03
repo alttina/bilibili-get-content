@@ -1,4 +1,4 @@
-"""Summarize a local harvest bundle without exposing its text bodies."""
+"""Summarize a local blisolver bundle without exposing its text bodies."""
 
 from __future__ import annotations
 
@@ -80,7 +80,7 @@ def summarize(value: str) -> dict:
         "schema_version": data.get("schema_version"),
         "identity": {
             key: data.get(key)
-            for key in ("platform", "id", "part", "url", "title", "uploader")
+            for key in ("platform", "id", "part", "url", "title", "uploader", "original_language", "available_subtitles")
         },
         "transcript": {
             "source": transcript.get("source"),

@@ -2,33 +2,33 @@
 
 ## Purpose
 
-`harvest` is the ingestion front-door for Atlas. It starts with a supported video URL and ends with
-a self-contained `out/<id>-p<part>/` delivery directory. Harvest produces a timeline-aligned
+`blisolver` is the ingestion front-door for Atlas. It starts with a supported video URL and ends with
+a self-contained `out/<id>-p<part>/` delivery directory. BliSolver produces a timeline-aligned
 original-language transcript and visual notes; downstream Atlas performs interpretation,
 summarization, and entity extraction.
 
 ## Current module map
 
-- `harvest/cli.py` — parses `ingest`, `probe`, and `mcp`; orchestrates each selected part.
-- `harvest/providers/base.py` — `Canonical`, normalized `SourceMetadata`, `SubtitleOutcome`,
+- `blisolver/cli.py` — parses `ingest`, `probe`, and `mcp`; orchestrates each selected part.
+- `blisolver/providers/base.py` — `Canonical`, normalized `SourceMetadata`, `SubtitleOutcome`,
   provider protocol, and registry.
-- `harvest/providers/bilibili.py` — bilibili URL resolution, metadata, subtitles, danmaku, and
+- `blisolver/providers/bilibili.py` — bilibili URL resolution, metadata, subtitles, danmaku, and
   command-danmaku interactions.
-- `harvest/providers/youtube.py` — YouTube yt-dlp metadata and original-language caption selection.
-- `harvest/subtitles.py` — yt-dlp options and BCC/SRT/VTT subtitle parsers.
-- `harvest/probe.py` — maps normalized provider metadata to `ProbeResult`.
-- `harvest/transcribe.py` — audio download/cache plus the current `whisper-cli`/whisper.cpp SRT
+- `blisolver/providers/youtube.py` — YouTube yt-dlp metadata and original-language caption selection.
+- `blisolver/subtitles.py` — yt-dlp options and BCC/SRT/VTT subtitle parsers.
+- `blisolver/probe.py` — maps normalized provider metadata to `ProbeResult`.
+- `blisolver/transcribe.py` — audio download/cache plus the current `whisper-cli`/whisper.cpp SRT
   transcription shim.
-- `harvest/frames.py` — video download/cache, periodic ffmpeg sampling, and phash deduplication.
-- `harvest/vision.py` — LM Studio OpenAI-compatible image captioning and projector verification.
-- `harvest/detect_hardsubs.py`, `harvest/ocr.py`, `scripts/ocr_worker.py` — optional isolated
+- `blisolver/frames.py` — video download/cache, periodic ffmpeg sampling, and phash deduplication.
+- `blisolver/vision.py` — LM Studio OpenAI-compatible image captioning and projector verification.
+- `blisolver/detect_hardsubs.py`, `blisolver/ocr.py`, `scripts/ocr_worker.py` — optional isolated
   burned-in subtitle OCR.
-- `harvest/fuse.py` — adds transcript/OCR cross-verification diagnostics.
-- `harvest/danmaku.py` — fixed-window faithful danmaku representation when explicitly requested.
-- `harvest/interactions.py` — structured Vote/Grade decoding without an LLM.
-- `harvest/merge.py` — timeline chunking, bundle construction, Markdown rendering, and delivery.
-- `harvest/schema.py` — Pydantic schema 1.1, the machine-facing bundle contract.
-- `harvest/mcp/server.py` — MCP tools around probe, asynchronous ingest, transcript, timeline, and
+- `blisolver/fuse.py` — adds transcript/OCR cross-verification diagnostics.
+- `blisolver/danmaku.py` — fixed-window faithful danmaku representation when explicitly requested.
+- `blisolver/interactions.py` — structured Vote/Grade decoding without an LLM.
+- `blisolver/merge.py` — timeline chunking, bundle construction, Markdown rendering, and delivery.
+- `blisolver/schema.py` — Pydantic schema 1.1, the machine-facing bundle contract.
+- `blisolver/mcp/server.py` — MCP tools around probe, asynchronous ingest, transcript, timeline, and
   visual-context reads.
 
 ## Execution flow
@@ -62,13 +62,13 @@ result.
 
 ## MCP boundary
 
-`harvest mcp` runs the stdio MCP server. The server exposes cheap `probe_video`, asynchronous
+`blisolver mcp` runs the stdio MCP server. The server exposes cheap `probe_video`, asynchronous
 `extract_transcript`, and polling reads for transcript, unified timeline, and visual context. It
 reuses the same CLI/pipeline semantics; it is an Agent-facing transport, not a second ingestion
 implementation.
 
-## What harvest is not
+## What blisolver is not
 
-Harvest should not summarize a lecture, infer entities, classify audience sentiment, or turn
+BliSolver should not summarize a lecture, infer entities, classify audience sentiment, or turn
 engagement counts into claims about video content. Those judgments belong to Atlas, with the bundle's
 provenance and authority signals available as input.

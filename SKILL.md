@@ -1,20 +1,20 @@
 ---
-name: harvest-video-ingestion
-description: Operate the BliSolver harvest pipeline for bilibili.com and YouTube videos, diagnose its runtime, run probe or ingest, and inspect or validate Atlas bundle outputs. Use when an Agent needs video acquisition, caption-versus-Whisper decisions, frame/vision/OCR processing, danmaku or interaction provenance, provider troubleshooting, or schema-1.1 bundle handling; do not use it for downstream summarization or entity extraction.
+name: blisolver-video-ingestion
+description: Operate the BliSolver blisolver pipeline for bilibili.com and YouTube videos, diagnose its runtime, run probe or ingest, and inspect or validate Atlas bundle outputs. Use when an Agent needs video acquisition, caption-versus-Whisper decisions, frame/vision/OCR processing, danmaku or interaction provenance, provider troubleshooting, or schema-1.1 bundle handling; do not use it for downstream summarization or entity extraction.
 license: MIT
-compatibility: Requires Python 3.11+ and either a BliSolver checkout or an installed harvest command; media stages additionally require their documented external tools and services.
+compatibility: Requires Python 3.11+ and either a BliSolver checkout or an installed blisolver command; media stages additionally require their documented external tools and services.
 metadata:
   project: BliSolver
   bundle-schema: "1.1"
   platforms: "bilibili.com, youtube.com"
 ---
 
-# Harvest video ingestion
+# BliSolver video ingestion
 
-Use this skill to operate the **BliSolver/harvest** ingestion front-door. Harvest acquires a video,
+Use this skill to operate the **BliSolver/blisolver** ingestion front-door. BliSolver acquires a video,
 chooses a trustworthy original-language transcript, optionally extracts visual/OCR context and
 bilibili engagement tracks, and writes an Atlas-consumable bundle. It is not the Atlas summarizer:
-do not ask harvest to summarize, extract entities, or promote danmaku into facts.
+do not ask blisolver to summarize, extract entities, or promote danmaku into facts.
 
 ## Current truth
 
@@ -27,13 +27,13 @@ When documents disagree, use this order:
 
 The current contract is schema **1.1**. It includes per-segment `source`/`confidence` and an
 independent `Bundle.ocr` track. The current ASR implementation is `whisper-cli`/whisper.cpp; older
-faster-whisper/CUDA descriptions are historical where they conflict with `harvest/transcribe.py`.
+faster-whisper/CUDA descriptions are historical where they conflict with `blisolver/transcribe.py`.
 `bilibili.tv` is deferred and unsupported.
 
 ## Standard workflow
 
 Set `SKILL_ROOT` to the directory containing this `SKILL.md` (for example,
-`~/.agents/skills/harvest-video-ingestion`) and use that absolute path when invoking scripts.
+`~/.agents/skills/blisolver-video-ingestion`) and use that absolute path when invoking scripts.
 
 1. **Locate the runtime.** Run the bundled doctor before an expensive operation:
 
@@ -41,8 +41,8 @@ Set `SKILL_ROOT` to the directory containing this `SKILL.md` (for example,
    python "$SKILL_ROOT/scripts/doctor.py" --project-root /path/to/BliSolver --json
    ```
 
-   The wrappers also discover `HARVEST_PROJECT_ROOT`, an ancestor checkout, or an installed
-   `harvest` command. Never put cookies or API keys on a command line.
+   The wrappers also discover `BLISOLVER_PROJECT_ROOT`, an ancestor checkout, or an installed
+   `blisolver` command. Never put cookies or API keys on a command line.
 
 2. **Check the URL.** Only `bilibili.com` and YouTube are supported. For a cheap metadata check:
 
@@ -66,7 +66,7 @@ Set `SKILL_ROOT` to the directory containing this `SKILL.md` (for example,
    | select a bilibili part | `--part N` |
    | process all bilibili parts | `--all-parts` |
    | force local ASR | `--force-whisper` |
-   | pin language | `--lang CODE` |
+   | pin language | `--lang CODE` (defaults to user's conversation language) |
    | avoid repetition loops | `--robust` |
    | skip frames/vision | `--no-vision` |
    | omit delivered PNGs | `--no-frame-images` |
@@ -74,8 +74,9 @@ Set `SKILL_ROOT` to the directory containing this `SKILL.md` (for example,
    | mirror bilibili danmaku | `--danmaku` |
    | capture command-danmaku votes/grades | `--interactions` |
 
-   Caption acquisition normally prefers a usable original-language caption. Use
-   `--force-whisper` when higher-authority local transcription is required.
+   **User-Language Alignment & Probe Decisioning:**
+   - Always align `--lang CODE` to the language of the user in the active conversation (e.g. `--lang en` for an English conversation, `--lang zh` for Chinese).
+   - `probe.py` returns `original_language` (the video's spoken language) and `available_subtitles` (all available subtitle tracks on the platform). Use this metadata to decide whether to fetch a platform track or trigger `--force-whisper --lang <original_language>`.
 
 4. **Inspect and validate the result.** A successful part produces `out/<id>-p<part>/` with
    `bundle.json`, `bundle.md`, and optionally `frames/`:
@@ -97,8 +98,8 @@ The portable skill contains five public entry points and one internal helper:
 | File | Status | Purpose |
 |---|---|---|
 | `scripts/doctor.py` | public | Offline runtime/dependency/configuration report |
-| `scripts/probe.py` | public | JSON-safe wrapper around `harvest probe` |
-| `scripts/ingest.py` | public | Safe flag-forwarding wrapper around `harvest ingest` |
+| `scripts/probe.py` | public | JSON-safe wrapper around `blisolver probe` |
+| `scripts/ingest.py` | public | Safe flag-forwarding wrapper around `blisolver ingest` |
 | `scripts/inspect_bundle.py` | public | Local compact bundle summary |
 | `scripts/validate_bundle.py` | public | Schema 1.1, path, and artifact validation |
 | `scripts/_common.py` | internal | Runtime discovery and safe path/subprocess helpers; do not call directly |
@@ -131,6 +132,6 @@ project-local helpers such as `scripts/ocr_worker.py`; that OCR worker is a runt
 | terminology and authority | `references/domain-glossary.md` |
 | source/test locations and stale docs | `references/source-map.md` |
 
-The skill package intentionally does not vendor the `harvest/` application, environments, models,
+The skill package intentionally does not vendor the `blisolver/` application, environments, models,
 media, caches, outputs, or secrets. Install/copy the directory as a skill, then point its scripts at
 the target BliSolver checkout or installed CLI.

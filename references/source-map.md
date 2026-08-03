@@ -6,20 +6,20 @@ Use these files when an operational claim needs verification in a live checkout:
 
 | Claim | Current source |
 |---|---|
-| CLI verbs and flags | `harvest/cli.py` |
-| schema version and Pydantic shapes | `harvest/schema.py` |
-| runtime/env defaults | `harvest/config.py`, `.env.example` |
-| provider registry and normalized seam | `harvest/providers/base.py` |
-| bilibili acquisition | `harvest/providers/bilibili.py`, `harvest/player_api.py`, `harvest/danmaku.py`, `harvest/interactions.py` |
-| YouTube acquisition and caption tiers | `harvest/providers/youtube.py`, `harvest/providers/youtube_autosub.py` |
-| subtitle formats and parsing | `harvest/subtitles.py` |
-| current ASR backend | `harvest/transcribe.py` |
-| frame extraction and dedup | `harvest/frames.py` |
-| LM Studio/projector behavior | `harvest/vision.py` |
-| hard-subtitle OCR isolate | `harvest/detect_hardsubs.py`, `harvest/ocr.py`, `scripts/ocr_worker.py` |
-| fusion diagnostics | `harvest/fuse.py` |
-| bundle rendering and writes | `harvest/merge.py` |
-| MCP behavior | `harvest/mcp/server.py` |
+| CLI verbs and flags | `blisolver/cli.py` |
+| schema version and Pydantic shapes | `blisolver/schema.py` |
+| runtime/env defaults | `blisolver/config.py`, `.env.example` |
+| provider registry and normalized seam | `blisolver/providers/base.py` |
+| bilibili acquisition | `blisolver/providers/bilibili.py`, `blisolver/player_api.py`, `blisolver/danmaku.py`, `blisolver/interactions.py` |
+| YouTube acquisition and caption tiers | `blisolver/providers/youtube.py`, `blisolver/providers/youtube_autosub.py` |
+| subtitle formats and parsing | `blisolver/subtitles.py` |
+| current ASR backend | `blisolver/transcribe.py` |
+| frame extraction and dedup | `blisolver/frames.py` |
+| LM Studio/projector behavior | `blisolver/vision.py` |
+| hard-subtitle OCR isolate | `blisolver/detect_hardsubs.py`, `blisolver/ocr.py`, `scripts/ocr_worker.py` |
+| fusion diagnostics | `blisolver/fuse.py` |
+| bundle rendering and writes | `blisolver/merge.py` |
+| MCP behavior | `blisolver/mcp/server.py` |
 
 ## Tests as executable truth
 
@@ -37,9 +37,9 @@ runtime discovery sources.
 
 ## Known stale statements
 
-- Older setup text describes faster-whisper/CUDA, but current `harvest/transcribe.py` invokes
+- Older setup text describes faster-whisper/CUDA, but current `blisolver/transcribe.py` invokes
   `whisper-cli`/whisper.cpp.
-- Early architecture notes may describe schema 1.0; current `harvest/schema.py` and emitted bundles
+- Early architecture notes may describe schema 1.0; current `blisolver/schema.py` and emitted bundles
   use schema 1.1 with per-cue provenance and `Bundle.ocr`.
 - Historical bilibili-only descriptions predate the current YouTube provider and its caption policy.
 - `bilibili.tv` may appear in type-level architecture, but current CLI control flow deliberately

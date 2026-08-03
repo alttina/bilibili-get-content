@@ -2,7 +2,7 @@
 
 ## Provider selection
 
-`harvest.providers.base.select_provider(url)` walks the registered providers and returns a provider
+`blisolver.providers.base.select_provider(url)` walks the registered providers and returns a provider
 that matches the URL. The provider resolves the URL to a `Canonical` identity, fetches normalized
 `SourceMetadata`, enumerates parts, and owns source-specific subtitle/auth behavior. Shared stages do
 not consume raw platform response shapes.
@@ -11,7 +11,7 @@ not consume raw platform response shapes.
 
 - A bilibili URL resolves to `platform="bilibili.com"`, a `BV...` id, and a 1-based part.
 - Authenticated browser cookies are normally required. The default browser source is configured by
-  harvest settings; `SESSDATA` is a fallback. Requests use the bilibili referer where required.
+  blisolver settings; `SESSDATA` is a fallback. Requests use the bilibili referer where required.
 - Human/original subtitles are preferred. The player API/cookie path can expose AI captions that
   yt-dlp alone does not surface. AI captions are accepted only after the current quality and
   duration/part-match gates; rejected or unavailable captions fall back to Whisper.

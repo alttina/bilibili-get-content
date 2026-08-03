@@ -2,7 +2,7 @@
 
 ## Atlas
 
-The downstream knowledge base. Atlas reads harvest's bundle and performs interpretation. Harvest is
+The downstream knowledge base. Atlas reads blisolver's bundle and performs interpretation. BliSolver is
 an acquisition and normalization boundary, not the final semantic analyst.
 
 ## Bundle
@@ -37,7 +37,7 @@ A hardsub is text burned into pixels. The optional OCR stage extracts hardsubs i
 
 ## Danmaku
 
-Bilibili's scrolling audience comments. In harvest it is a faithful, lower-authority mirror with
+Bilibili's scrolling audience comments. In blisolver it is a faithful, lower-authority mirror with
 content-time windows and verbatim representative lines. It signals audience reaction, not verified
 video facts.
 

@@ -1,4 +1,4 @@
-"""Validate a local harvest bundle against the current schema and artifact layout."""
+"""Validate a local blisolver bundle against the current schema and artifact layout."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ def _load_schema(project_root: str | None):
         root_text = str(root)
         if root_text not in sys.path:
             sys.path.insert(0, root_text)
-    from harvest.schema import Bundle, SCHEMA_VERSION
+    from blisolver.schema import Bundle, SCHEMA_VERSION
 
     return Bundle, SCHEMA_VERSION
 
